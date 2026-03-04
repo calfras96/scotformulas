@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#4f46e5" />
+  <meta name="description" content="Scottish Maths Formula Sheet for National 5, Higher and Advanced Higher" />
+  <title>ScotFormulas – Maths</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5; --primary-light: #818cf8; --primary-dark: #3730a3;
+      --n5: #10b981; --n5-light: #d1fae5;
+      --higher: #f59e0b; --higher-light: #fef3c7;
+      --adv: #ef4444; --adv-light: #fee2e2;
+      --bg: #f8faff; --card: #ffffff; --text: #1e1b4b; --text-muted: #6b7280;
+      --border: #e0e7ff; --shadow: 0 4px 24px rgba(79,70,229,0.08); --radius: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    header { background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-light) 100%); padding: 28px 20px 80px; text-align: center; position: relative; overflow: hidden; }
+    header::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; background:rgba(255,255,255,0.06); border-radius:50%; }
+    header::after  { content:''; position:absolute; bottom:-60px; left:-30px; width:160px; height:160px; background:rgba(255,255,255,0.04); border-radius:50%; }
+    .header-emoji { font-size:2.8rem; display:block; margin-bottom:8px; animation:bounce 2s infinite; }
+    @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+    header h1 { font-size:2rem; font-weight:900; color:white; letter-spacing:-0.5px; }
+    header p  { color:rgba(255,255,255,0.85); font-size:1rem; margin-top:6px; font-weight:600; }
+
+    .tabs-wrapper { display:flex; justify-content:center; gap:10px; padding:0 16px; margin-top:-32px; position:relative; z-index:10; flex-wrap:wrap; }
+    .tab { padding:10px 22px; border-radius:50px; border:none; font-family:'Nunito',sans-serif; font-size:0.95rem; font-weight:800; cursor:pointer; transition:all 0.2s; box-shadow:0 4px 12px rgba(0,0,0,0.12); background:white; color:var(--text-muted); }
+    .tab.n5.active     { background:var(--n5);    color:white; }
+    .tab.higher.active { background:var(--higher); color:white; }
+    .tab.adv.active    { background:var(--adv);    color:white; }
+    .tab:not(.active):hover { transform:translateY(-2px); box-shadow:0 6px 16px rgba(0,0,0,0.15); }
+
+    .search-wrapper { padding:20px 16px 8px; max-width:600px; margin:0 auto; position:relative; }
+    .search-box { width:100%; padding:12px 18px 12px 44px; border-radius:50px; border:2px solid var(--border); font-family:'Nunito',sans-serif; font-size:1rem; background:white; color:var(--text); outline:none; transition:border 0.2s; }
+    .search-box:focus { border-color:var(--primary-light); }
+    .search-icon { position:absolute; left:30px; top:50%; transform:translateY(-50%); font-size:1.1rem; pointer-events:none; margin-top:4px; }
+
+    main { max-width:700px; margin:0 auto; padding:8px 16px 60px; }
+
+    .level-badge { display:inline-block; padding:4px 14px; border-radius:50px; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:16px; margin-top:8px; }
+    .badge-n5     { background:var(--n5-light);     color:var(--n5); }
+    .badge-higher { background:var(--higher-light); color:#b45309; }
+    .badge-adv    { background:var(--adv-light);    color:var(--adv); }
+
+    .topic-section { margin-bottom:12px; border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); border:1.5px solid var(--border); overflow:hidden; transition:box-shadow 0.2s; }
+    .topic-section:hover { box-shadow:0 8px 32px rgba(79,70,229,0.13); }
+    .topic-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; cursor:pointer; user-select:none; gap:10px; }
+    .topic-title  { font-size:1.05rem; font-weight:800; display:flex; align-items:center; gap:10px; }
+    .topic-icon   { font-size:1.3rem; }
+    .chevron { font-size:1.1rem; transition:transform 0.25s; color:var(--text-muted); }
+    .topic-section.open .chevron { transform:rotate(180deg); }
+    .topic-body { display:none; padding:0 20px 16px; border-top:1.5px solid var(--border); animation:fadeIn 0.2s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+    .topic-section.open .topic-body { display:block; }
+
+    .formula-card { background:var(--bg); border-radius:12px; padding:14px 16px; margin-top:12px; border:1.5px solid var(--border); transition:border-color 0.2s; }
+    .formula-card:hover { border-color:var(--primary-light); }
+    .formula-name { font-size:0.88rem; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px; margin-bottom:8px; }
+    .formula-math { font-family:'JetBrains Mono',monospace; font-size:1rem; font-weight:600; color:var(--primary-dark); background:white; padding:10px 14px; border-radius:8px; border:1.5px solid var(--border); margin-bottom:8px; word-break:break-word; line-height:1.7; white-space:pre-wrap; }
+    .formula-desc { font-size:0.9rem; color:var(--text-muted); line-height:1.5; }
+    .formula-vars { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
+    .var-tag { background:var(--border); color:var(--primary-dark); font-size:0.78rem; font-weight:700; padding:3px 10px; border-radius:50px; font-family:'JetBrains Mono',monospace; }
+
+    .empty { text-align:center; padding:48px 20px; color:var(--text-muted); font-size:1rem; font-weight:600; }
+    .empty-emoji { font-size:2.5rem; display:block; margin-bottom:10px; }
+    footer { text-align:center; padding:20px; color:var(--text-muted); font-size:0.85rem; font-weight:600; }
+    #install-banner { display:none; position:fixed; bottom:16px; left:50%; transform:translateX(-50%); background:var(--primary); color:white; padding:12px 20px; border-radius:50px; font-weight:700; font-size:0.9rem; box-shadow:0 8px 24px rgba(79,70,229,0.4); cursor:pointer; z-index:100; white-space:nowrap; gap:8px; align-items:center; }
+    #install-banner.show { display:flex; }
+    .highlight { background:#fef9c3; border-radius:3px; padding:0 2px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="header-emoji">📐</span>
+  <h1>ScotFormulas</h1>
+  <p>Scottish Maths — National 5 · Higher · Advanced Higher</p>
+</header>
+
+<div class="tabs-wrapper">
+  <button class="tab n5 active" onclick="setLevel('n5')">National 5</button>
+  <button class="tab higher" onclick="setLevel('higher')">Higher</button>
+  <button class="tab adv" onclick="setLevel('adv')">Adv Higher</button>
+</div>
+
+<div class="search-wrapper">
+  <span class="search-icon">🔍</span>
+  <input class="search-box" type="text" placeholder="Search formulas..." id="searchInput" oninput="renderFormulas()" />
+</div>
+
+<main id="formulaContainer"></main>
+<footer>Made for Scottish students 🏴󠁧󠁢󠁳󠁣󠁴󠁿 · Free forever</footer>
+<div id="install-banner" onclick="installApp()">📲 Add to Home Screen</div>
+
+<script>
+const data = {
+  n5: [
+    { topic:"Area & Perimeter", icon:"📏", formulas:[
+      { name:"Rectangle", math:"Area = l × b\nPerimeter = 2 × (l + b)", desc:"l = length, b = breadth.", vars:["l = length","b = breadth"] },
+      { name:"Parallelogram", math:"Area = b × h", desc:"Base times perpendicular height.", vars:["b = base","h = height"] },
+      { name:"Kite / Rhombus", math:"Area = ½ × d₁ × d₂", desc:"Half the product of the two diagonals.", vars:["d₁,d₂ = diagonals"] },
+      { name:"Trapezium", math:"Area = ½(a + b) × h", desc:"Average of the parallel sides times height.", vars:["a,b = parallel sides","h = height"] },
+      { name:"Triangle", math:"Area = ½ × b × h", desc:"Half base times perpendicular height.", vars:["b = base","h = height"] },
+      { name:"Circle", math:"Area = π × r²\nCircumference = π × d", desc:"The space inside and distance around a circle.", vars:["r = radius","d = diameter"] },
+      { name:"Sector Area", math:"Sector Area = (x / 360°) × π × r²", desc:"A fraction of the full circle area.", vars:["x = angle in degrees","r = radius"] },
+      { name:"Arc Length", math:"Arc Length = (x / 360°) × π × d", desc:"A fraction of the full circumference.", vars:["x = angle in degrees","d = diameter"] },
+    ]},
+    { topic:"Volume & Surface Area", icon:"📦", formulas:[
+      { name:"Cuboid", math:"V = l × b × h", desc:"Length times breadth times height.", vars:["l,b,h = dimensions"] },
+      { name:"Prism", math:"V = A × h", desc:"Cross-sectional area times length.", vars:["A = cross-section area","h = length"] },
+      { name:"Cylinder", math:"V = π × r² × h\nCSA = 2 × π × r × h", desc:"Volume and curved surface area.", vars:["r = radius","h = height"] },
+      { name:"Sphere", math:"V = (4/3) × π × r³", desc:"Given on the formula sheet but worth memorising.", vars:["r = radius"] },
+      { name:"Cone", math:"V = (1/3) × π × r² × h", desc:"One third of a cylinder with the same base.", vars:["r = base radius","h = height"] },
+    ]},
+    { topic:"Algebra & Straight Line", icon:"🔢", formulas:[
+      { name:"Gradient", math:"m = (y₂ - y₁) / (x₂ - x₁)", desc:"Steepness of a line. Also: gradient = vertical ÷ horizontal.", vars:["m = gradient"] },
+      { name:"Equation of a Line", math:"y = mx + c\nor  y - b = m(x - a)", desc:"Use y - b = m(x - a) when you know a point and gradient.", vars:["m = gradient","c = y-intercept","(a,b) = point on line"] },
+      { name:"Quadratic Formula", math:"x = (-b ± √(b² - 4ac)) / 2a", desc:"Solves any quadratic ax² + bx + c = 0.", vars:["a,b,c = coefficients"] },
+      { name:"Discriminant", math:"Δ = b² - 4ac\nΔ > 0 → two distinct roots\nΔ = 0 → equal roots\nΔ < 0 → no real roots", desc:"Tells you how many solutions a quadratic has without solving it.", vars:[] },
+      { name:"Completing the Square", math:"y = (x - a)² + b\nTurning point = (a, b)", desc:"Rewrite a quadratic to find the turning point easily.", vars:["(a,b) = turning point"] },
+      { name:"Distance Formula", math:"d = √((x₂-x₁)² + (y₂-y₁)²)", desc:"Length of a line between two coordinate points.", vars:[] },
+    ]},
+    { topic:"Indices & Surds", icon:"⚡", formulas:[
+      { name:"Index Laws", math:"aᵐ × aⁿ = aᵐ⁺ⁿ\naᵐ ÷ aⁿ = aᵐ⁻ⁿ\n(aᵐ)ⁿ = aᵐˣⁿ\na⁻ᵐ = 1/aᵐ\naᵐ/ⁿ = ⁿ√(aᵐ)", desc:"The key rules for working with powers.", vars:[] },
+      { name:"Special Index Values", math:"a⁰ = 1,  a¹ = a\na^½ = √a,  a^⅓ = ∛a", desc:"Important special cases to memorise.", vars:[] },
+      { name:"Surd Rules", math:"√a × √b = √(ab)\n√a ÷ √b = √(a/b)\n√a × √a = a", desc:"Rules for simplifying and combining surds.", vars:[] },
+    ]},
+    { topic:"Trigonometry", icon:"📐", formulas:[
+      { name:"SOH CAH TOA", math:"sin x = Opp/Hyp\ncos x = Adj/Hyp\ntan x = Opp/Adj", desc:"The three trig ratios for right-angled triangles.", vars:["Opp = opposite","Adj = adjacent","Hyp = hypotenuse"] },
+      { name:"Trig Identities", math:"tan x = sin x / cos x\nsin²x + cos²x = 1", desc:"Two key identities needed for National 5 and beyond.", vars:[] },
+      { name:"Sine Rule", math:"a/sin A = b/sin B = c/sin C", desc:"Use when you know two angles and a side, or two sides and a non-included angle.", vars:["a,b,c = sides","A,B,C = opposite angles"] },
+      { name:"Cosine Rule", math:"a² = b² + c² - 2bc·cos A", desc:"Use when you know two sides and the included angle, or all three sides.", vars:["a,b,c = sides","A = angle opposite a"] },
+      { name:"Area of a Triangle", math:"Area = ½ab·sin C", desc:"Find the area when you know two sides and the included angle.", vars:["a,b = two sides","C = angle between them"] },
+      { name:"CAST Diagram", math:"  S  |  A\n  ———+———\n  T  |  C\n(anticlockwise from top-right)", desc:"Shows which trig ratios are positive in each quadrant: All, Sin, Tan, Cos.", vars:[] },
+    ]},
+    { topic:"Statistics", icon:"📊", formulas:[
+      { name:"Averages", math:"Mean  x̄ = Σx / n\nMedian  = Q₂\nMode  = most common value", desc:"Three measures of average.", vars:["Σx = sum of values","n = number of values"] },
+      { name:"Spread", math:"Range = Highest - Lowest\nIQR  = Q₃ - Q₁\nSIQR = (Q₃ - Q₁) ÷ 2", desc:"Measures of spread — range, interquartile range, semi-IQR.", vars:[] },
+      { name:"5 Figure Summary", math:"Lowest, Q₁, Q₂, Q₃, Highest", desc:"The five values needed to draw a box plot.", vars:[] },
+      { name:"Standard Deviation", math:"s = √(Σ(x - x̄)² / (n-1))", desc:"Measures how spread out data is from the mean.", vars:["x̄ = mean","n = number of values"] },
+    ]},
+    { topic:"Vectors", icon:"➡️", formulas:[
+      { name:"Component Vector", math:"AB→ = b - a", desc:"The vector from A to B = position vector of B minus A.", vars:["a,b = position vectors"] },
+      { name:"Magnitude (2D)", math:"|a| = √(x² + y²)", desc:"Length of a 2D vector.", vars:[] },
+      { name:"Magnitude (3D)", math:"|b| = √(x² + y² + z²)", desc:"Length of a 3D vector.", vars:[] },
+    ]},
+    { topic:"Similar Shapes & Angles", icon:"🔷", formulas:[
+      { name:"Similar Shape Scale Factors", math:"Length SF = new / old\nArea SF   = (Length SF)²\nVolume SF = (Length SF)³", desc:"Area and volume scale factors are powers of the length scale factor.", vars:[] },
+      { name:"Angle Rules", math:"Triangle = 180°\nQuadrilateral = 360°\nComplementary = 90°\nSupplementary = 180°", desc:"Key angle facts.", vars:[] },
+      { name:"Parallel Line Angles", math:"Corresponding (F) = equal\nAlternate (Z) = equal\nVertically opposite = equal", desc:"Angle relationships when a transversal crosses parallel lines.", vars:[] },
+      { name:"Pythagoras", math:"c² = a² + b²", desc:"In a right-angled triangle, square of hypotenuse = sum of squares of other two sides.", vars:["c = hypotenuse","a,b = other sides"] },
+    ]},
+  ],
+
+  higher: [
+    { topic:"Straight Line", icon:"📏", formulas:[
+      { name:"Gradient", math:"m = (y₂-y₁)/(x₂-x₁)\nalso: m = tan θ", desc:"θ is the angle the line makes with the positive x-axis.", vars:["m = gradient","θ = angle with x-axis"] },
+      { name:"Equation of a Line", math:"y - b = m(x - a)", desc:"Use when you know a point (a,b) and gradient m.", vars:["(a,b) = point on line","m = gradient"] },
+      { name:"Parallel & Perpendicular", math:"Parallel:      m₁ = m₂\nPerpendicular: m₁ × m₂ = -1", desc:"For perpendicular: flip the gradient and change the sign.", vars:[] },
+      { name:"Midpoint & Distance", math:"M = ((x₁+x₂)/2, (y₁+y₂)/2)\nd = √((x₂-x₁)²+(y₂-y₁)²)", desc:"Midpoint and length of a line between two points.", vars:[] },
+      { name:"Perpendicular Bisector", math:"Passes through midpoint\nPerpendicular to the line", desc:"Two properties to find its equation.", vars:[] },
+      { name:"Altitude of Triangle", math:"Through vertex A\nPerpendicular to opposite side", desc:"Get gradient of opposite side, flip and change sign for altitude gradient.", vars:[] },
+      { name:"Median of Triangle", math:"Through vertex A\nThrough midpoint of opposite side", desc:"Find midpoint of opposite side, then gradient from midpoint to A.", vars:[] },
+    ]},
+    { topic:"Circles", icon:"⭕", formulas:[
+      { name:"Standard Circle Equation", math:"(x - a)² + (y - b)² = r²", desc:"Circle with centre (a,b) and radius r.", vars:["(a,b) = centre","r = radius"] },
+      { name:"General Circle Equation", math:"x²+y²+2gx+2fy+c = 0\nCentre = (-g, -f)\nRadius = √(g²+f²-c)", desc:"Complete the square to find centre and radius from this form.", vars:[] },
+      { name:"Line & Circle Intersection", math:"1) Rearrange line for y (or x)\n2) Substitute into circle\n3) Solve the quadratic", desc:"If Δ = 0: tangent. If Δ < 0: no intersection.", vars:[] },
+      { name:"Tangent to a Circle", math:"Tangent ⊥ radius at contact point", desc:"Radius gradient → flip and change sign → tangent gradient.", vars:[] },
+      { name:"Two Circles", math:"d > r₁+r₂ → no intersection\nd = r₁+r₂ → touch externally\nd < r₁+r₂ → overlap", desc:"Compare distance between centres to sum of radii.", vars:["d = distance between centres"] },
+    ]},
+    { topic:"Functions & Graphs", icon:"🖥️", formulas:[
+      { name:"Graph Transformations", math:"f(x)+k  → shift up k\nf(x+k)  → shift left k\nkf(x)   → stretch vertically ×k\nf(kx)   → compress horizontally ×k\n-f(x)   → reflect in x-axis\nf(-x)   → reflect in y-axis", desc:"Horizontal transformations go the OPPOSITE direction to what you'd expect!", vars:[] },
+      { name:"Domain & Range", math:"Domain = what goes IN\nRange  = what comes OUT", desc:"Domain restricted by: √(negative), or dividing by zero.", vars:[] },
+      { name:"Completing the Square", math:"a(x+p)² + q\nTurning point = (-p, q)", desc:"Note: TP x-coordinate is -p, not p.", vars:[] },
+      { name:"Inverse Function", math:"1) Switch x and y\n2) Rearrange for y\nVerify: f(g(x)) = x", desc:"To check two functions are inverses, show f(g(x)) = x.", vars:[] },
+      { name:"Recurrence Relations", math:"uₙ₊₁ = a·uₙ + b\nLimit L = b/(1-a)\n(only when -1 < a < 1)", desc:"Always state 'a limit exists because a = ___, which is between -1 and 1' for the communication mark.", vars:[] },
+    ]},
+    { topic:"Quadratics", icon:"🔢", formulas:[
+      { name:"Quadratic Formula", math:"x = (-b ± √(b²-4ac)) / 2a", desc:"Solves any quadratic ax²+bx+c = 0.", vars:[] },
+      { name:"Discriminant", math:"Δ = b²-4ac\nΔ > 0 → two distinct roots\nΔ = 0 → repeated root (tangent)\nΔ < 0 → no real roots", desc:"Use to determine nature of roots, or prove a line is a tangent to a curve.", vars:[] },
+      { name:"Stationary Points", math:"dy/dx = 0  at stationary point\nd²y/dx² > 0 → minimum\nd²y/dx² < 0 → maximum", desc:"Differentiate to find, use second derivative (or nature table) to classify.", vars:[] },
+      { name:"Remainder Theorem", math:"f(a) = remainder when f(x) ÷ (x-a)", desc:"Substitute x = a to find remainder. Use synthetic division to factorise fully.", vars:[] },
+    ]},
+    { topic:"Differentiation", icon:"📉", formulas:[
+      { name:"Power Rule", math:"d/dx [xⁿ] = nxⁿ⁻¹", desc:"Multiply by the old power, reduce the power by 1.", vars:[] },
+      { name:"Chain Rule (brackets)", math:"d/dx [(ax+b)ⁿ] = n·a·(ax+b)ⁿ⁻¹", desc:"Multiply by old power, reduce power, multiply by derivative of the bracket.", vars:[] },
+      { name:"Trig Derivatives", math:"d/dx[sin x] =  cos x\nd/dx[cos x] = -sin x", desc:"x must be in radians. Must be memorised.", vars:[] },
+      { name:"Function Behaviour", math:"dy/dx > 0 → increasing\ndy/dx < 0 → decreasing\ndy/dx = 0 → stationary", desc:"The sign of the derivative tells you the behaviour of the function.", vars:[] },
+    ]},
+    { topic:"Integration", icon:"📈", formulas:[
+      { name:"Power Rule", math:"∫xⁿ dx = xⁿ⁺¹/(n+1) + C", desc:"Add 1 to power, divide by new power, add C. Always write +C for indefinite integrals.", vars:[] },
+      { name:"Bracket Integration", math:"∫(ax+b)ⁿ dx = (ax+b)ⁿ⁺¹/((n+1)·a) + C", desc:"Add 1 to power, divide by new power, divide again by bracket's derivative.", vars:[] },
+      { name:"Trig Integration", math:"∫sin x dx = -cos x + C\n∫cos x dx =  sin x + C", desc:"Note the minus sign when integrating sin.", vars:[] },
+      { name:"Definite Integral", math:"∫ᵃᵇ f(x) dx = F(b) - F(a)", desc:"Area below the x-axis gives a negative value — deal with this separately.", vars:[] },
+      { name:"Area Between Curves", math:"Area = ∫(top curve - bottom curve) dx", desc:"Integrate between the intersection points.", vars:[] },
+    ]},
+    { topic:"Trigonometry", icon:"📐", formulas:[
+      { name:"Exact Values", math:"sin 30°=½     cos 30°=√3/2  tan 30°=1/√3\nsin 45°=1/√2  cos 45°=1/√2  tan 45°=1\nsin 60°=√3/2  cos 60°=½     tan 60°=√3\nsin 90°=1     cos 0°=1      cos 180°=-1", desc:"Must be memorised — come up constantly in Higher.", vars:[] },
+      { name:"Radians", math:"180° = π     360° = 2π     90° = π/2\nDeg→Rad: ÷180 × π\nRad→Deg: ÷π  × 180", desc:"Be comfortable converting between degrees and radians.", vars:[] },
+      { name:"Compound Angle — sin", math:"sin(A±B) = sinA cosB ± cosA sinB", desc:"Signs on both sides match (± stays ±).", vars:[] },
+      { name:"Compound Angle — cos", math:"cos(A±B) = cosA cosB ∓ sinA sinB", desc:"Signs are OPPOSITE on the right side (± becomes ∓).", vars:[] },
+      { name:"Double Angle", math:"sin 2A = 2 sinA cosA\ncos 2A = cos²A - sin²A\n       = 2cos²A - 1\n       = 1 - 2sin²A", desc:"Three equivalent forms for cos 2A — use whichever simplifies the problem.", vars:[] },
+      { name:"Wave Function", math:"a sinx + b cosx = k sin(x+α)\nk = √(a²+b²)", desc:"k is always positive. Use compound angle formula to find α.", vars:["k = amplitude","α = phase angle"] },
+      { name:"Trig Identities", math:"tan x = sin x / cos x\nsin²x + cos²x = 1", desc:"Rearrange the second: sin²x = 1-cos²x, or cos²x = 1-sin²x.", vars:[] },
+    ]},
+    { topic:"Vectors", icon:"➡️", formulas:[
+      { name:"Magnitude", math:"|u| = √(x²+y²+z²)", desc:"Square all components, add, square root.", vars:[] },
+      { name:"Component Vector", math:"AB→ = b - a", desc:"Vector FROM A TO B = position vector of B minus A.", vars:[] },
+      { name:"Scalar (Dot) Product", math:"a·b = |a||b|cosθ\n    = a₁b₁+a₂b₂+a₃b₃", desc:"Use components to calculate; use modulus form to find angle θ.", vars:["θ = angle between vectors"] },
+      { name:"Perpendicular Vectors", math:"a·b = 0  ⟺  a ⊥ b", desc:"Dot product equals zero means the vectors are perpendicular.", vars:[] },
+      { name:"Parallel Vectors", math:"u = k·v  (k is a scalar)", desc:"One vector is a scalar multiple of the other.", vars:[] },
+      { name:"Collinear Points", math:"1) Show two vectors are parallel\n2) State they share a common point", desc:"Both steps required — don't forget to mention the common point!", vars:[] },
+    ]},
+    { topic:"Logarithms & Exponentials", icon:"📊", formulas:[
+      { name:"Log Laws", math:"log(AB) = logA + logB\nlog(A/B)= logA - logB\nlog(Aⁿ)= n·logA\nlog 1  = 0", desc:"Adding logs → multiply. Subtracting → divide. Power → brings down to front.", vars:[] },
+      { name:"Inverse Functions", math:"y = aˣ   ⟺   x = logₐ y\ny = eˣ   ⟺   x = ln y", desc:"Log and exponential are inverses. Use ln to solve equations with e.", vars:[] },
+      { name:"Natural Log", math:"ln x = logₑ x,   e ≈ 2.72", desc:"Use ln to 'undo' e. Take ln of both sides to solve eˣ = b.", vars:[] },
+      { name:"Solving Exponential Equations", math:"aˣ = b  →  x = log b / log a\neˣ = b  →  x = ln b", desc:"Take logs of both sides, bring x to the front using the power law.", vars:[] },
+      { name:"Exponential Model", math:"y = Aeᵏᵗ\nA = starting value\nk = rate (k>0 growth, k<0 decay)", desc:"Standard model for exponential growth and decay.", vars:[] },
+    ]},
+  ],
+
+  adv: [
+    { topic:"Differentiation", icon:"📉", formulas:[
+      { name:"Product Rule", math:"d/dx[uv] = u'v + uv'", desc:"For differentiating two functions multiplied together.", vars:["u,v = functions of x"] },
+      { name:"Quotient Rule", math:"d/dx[u/v] = (u'v - uv') / v²", desc:"Low d-high minus high d-low, over low squared.", vars:[] },
+      { name:"Chain Rule", math:"dy/dx = (dy/du)·(du/dx)", desc:"Differentiate outside, keep inside, multiply by derivative of inside.", vars:[] },
+      { name:"Standard Derivatives", math:"d/dx[eˣ]    =  eˣ\nd/dx[ln x]  =  1/x\nd/dx[sin x] =  cos x\nd/dx[cos x] = -sin x\nd/dx[tan x] =  sec²x", desc:"All must be memorised.", vars:[] },
+      { name:"Inverse Trig Derivatives", math:"d/dx[sin⁻¹x] =  1/√(1-x²)\nd/dx[cos⁻¹x] = -1/√(1-x²)\nd/dx[tan⁻¹x] =  1/(1+x²)", desc:"Given on the formula sheet but useful to memorise.", vars:[] },
+      { name:"Parametric Equations", math:"dy/dx = (dy/dt) / (dx/dt)\nSpeed = √((dx/dt)²+(dy/dt)²)", desc:"For a curve defined by x=f(t), y=g(t). Divide the derivatives to get the gradient.", vars:["t = parameter"] },
+      { name:"Inverse Function Derivative", math:"dy/dx = 1 / (dx/dy)", desc:"Flip the derivative to differentiate an inverse function.", vars:[] },
+    ]},
+    { topic:"Integration", icon:"📈", formulas:[
+      { name:"Integration by Parts", math:"∫u(dv/dx)dx = uv - ∫v(du/dx)dx", desc:"LIATE rule for choosing u: Logarithm, Inverse trig, Algebra, Trig, Exponential.", vars:[] },
+      { name:"Standard Integrals", math:"∫eᵃˣ dx      = (1/a)eᵃˣ + C\n∫(1/x) dx    = ln|x| + C\n∫sin ax dx   = -(1/a)cos ax + C\n∫cos ax dx   =  (1/a)sin ax + C\n∫sec²ax dx   =  (1/a)tan ax + C\n∫1/√(a²-x²)dx = sin⁻¹(x/a) + C\n∫1/(a²+x²)dx  = (1/a)tan⁻¹(x/a) + C", desc:"All on the formula sheet but worth memorising.", vars:[] },
+      { name:"f'(x)/f(x) Rule", math:"∫f'(x)/f(x) dx = ln|f(x)| + C", desc:"When the numerator is the derivative of the denominator.", vars:[] },
+      { name:"Substitution", math:"u = g(x)  →  du = g'(x)dx\n∫f(g(x))g'(x)dx = ∫f(u)du", desc:"Substitute back to the original variable at the end.", vars:[] },
+      { name:"Partial Fractions", math:"Split into A/(ax+b) + B/(cx+d)\nEach integrates to a ln term", desc:"Decompose before integrating. Each fraction uses ∫1/x = ln|x|.", vars:[] },
+      { name:"Volume of Revolution", math:"About x-axis: V = π∫ₐᵇ [f(x)]² dx\nAbout y-axis: V = π∫ₐᵇ [f(y)]² dy", desc:"The volume formed when a curve is rotated 360° about an axis.", vars:[] },
+    ]},
+    { topic:"Differential Equations", icon:"🔄", formulas:[
+      { name:"Separable ODE", math:"dy/dx = f(x)g(y)\n→ ∫1/g(y) dy = ∫f(x) dx", desc:"Separate variables to each side, integrate both sides, don't forget +C.", vars:[] },
+      { name:"First Order Linear ODE", math:"dy/dx + P(x)y = Q(x)\nIF = e^∫P(x)dx\nSolution: y·IF = ∫IF·Q(x) dx", desc:"Multiply through by integrating factor. Left side becomes d/dx[y × IF].", vars:["IF = integrating factor"] },
+      { name:"2nd Order ODE — Complementary Function", math:"Two distinct roots m, n:  y = Aeᵐˣ + Beⁿˣ\nEqual roots m:           y = (A+Bx)eᵐˣ\nComplex roots p±qi:      y = eᵖˣ(A cosqx + B sinqx)", desc:"Solve the auxiliary equation am²+bm+c=0 to find the roots, then choose the correct CF form.", vars:[] },
+      { name:"2nd Order ODE — Particular Integral", math:"RHS is eᵃˣ      → try  y = Peᵃˣ\nRHS is sin/cos  → try  y = P cosax + Q sinax\nRHS is linear   → try  y = Px + Q\nRHS is quadratic→ try  y = Px²+Qx+R", desc:"General solution = Complementary Function + Particular Integral.", vars:[] },
+    ]},
+    { topic:"Sequences & Series", icon:"🔢", formulas:[
+      { name:"Arithmetic — nth Term & Sum", math:"uₙ = a + (n-1)d\nSₙ = n/2 · (2a + (n-1)d)", desc:"nth term and sum of first n terms of an arithmetic series.", vars:["a = first term","d = common difference"] },
+      { name:"Geometric — nth Term & Sum", math:"uₙ = arⁿ⁻¹\nSₙ = a(1-rⁿ)/(1-r)", desc:"nth term and sum of first n terms of a geometric series.", vars:["a = first term","r = common ratio"] },
+      { name:"Sum to Infinity", math:"S∞ = a/(1-r)   (only when |r| < 1)", desc:"Infinite geometric series only converges when the ratio is between -1 and 1.", vars:[] },
+      { name:"Summation Identities", math:"Σk   = n(n+1)/2\nΣk²  = n(n+1)(2n+1)/6\nΣk³  = [n(n+1)/2]²", desc:"Standard results for summing integers, squares and cubes from 1 to n.", vars:[] },
+      { name:"Binomial Theorem", math:"(x+y)ⁿ: coeff of rth term = C(n,r) xⁿ⁻ʳ yʳ\nC(n,r) = n! / r!(n-r)!", desc:"nCr on your calculator. Remember r starts at 0 for the first term.", vars:["n = power","r = term index (starts at 0)"] },
+      { name:"Maclaurin Series — General", math:"f(x) = f(0)+f'(0)x+f''(0)x²/2!+f'''(0)x³/3!+...", desc:"Power series expansion about x = 0.", vars:[] },
+      { name:"Maclaurin Series — Standard", math:"eˣ  = 1 + x + x²/2! + x³/3! + ...\nsinx = x - x³/3! + x⁵/5! - ...\ncosx = 1 - x²/2! + x⁴/4! - ...", desc:"Must memorise these three. sin has odd powers, cos has even powers.", vars:[] },
+    ]},
+    { topic:"Trig Identities (AH)", icon:"📐", formulas:[
+      { name:"Squared Identities", math:"sin²A + cos²A = 1\n1 + tan²A = sec²A\ncot²A + 1 = cosec²A", desc:"All three must be memorised. The second two follow from dividing the first by cos²A or sin²A.", vars:[] },
+      { name:"Half Angle / Squared Forms", math:"cos²x = ½(1 + cos 2x)\nsin²x = ½(1 - cos 2x)", desc:"Useful for integrating cos²x and sin²x — use these to rewrite before integrating.", vars:[] },
+      { name:"Compound & Double Angle", math:"sin(A±B) = sinA cosB ± cosA sinB\ncos(A±B) = cosA cosB ∓ sinA sinB\ntan(A±B) = (tanA±tanB)/(1∓tanAtanB)\nsin2A = 2sinA cosA\ncos2A = cos²A - sin²A\ntan2A = 2tanA/(1-tan²A)", desc:"All must be memorised — not all are on the AH formula sheet.", vars:[] },
+      { name:"Negative Angle Facts", math:"sin(-x) = -sin(x)\ncos(-x) =  cos(x)\ntan(-x) = -tan(x)", desc:"sin and tan are odd functions; cos is an even function.", vars:[] },
+    ]},
+    { topic:"Complex Numbers", icon:"🌀", formulas:[
+      { name:"Modulus & Argument", math:"|z| = √(a²+b²)\narg(z) = tan⁻¹(b/a)", desc:"Modulus = distance from origin. Argument = angle with positive real axis.", vars:["a = real part","b = imaginary part"] },
+      { name:"Polar Form & De Moivre", math:"z = r(cosθ + i sinθ)\n(cosθ+i sinθ)ⁿ = cos(nθ)+i sin(nθ)", desc:"De Moivre: used to raise complex numbers to powers or find multiple angle formulae.", vars:[] },
+      { name:"Conjugate", math:"z = a+bi  →  z* = a-bi\nz·z* = |z|²", desc:"Complex roots of real polynomials always come in conjugate pairs.", vars:[] },
+    ]},
+    { topic:"Matrices", icon:"⬛", formulas:[
+      { name:"2×2 Determinant & Inverse", math:"A = [[a,b],[c,d]]\ndet A = ad - bc\nA⁻¹ = (1/detA)·[[d,-b],[-c,a]]", desc:"Swap a and d, negate b and c, divide by det. Only exists when det ≠ 0.", vars:[] },
+      { name:"3×3 Determinant", math:"det A = a(ei-fh) - b(di-fg) + c(dh-eg)\nfor A = [[a,b,c],[d,e,f],[g,h,i]]", desc:"Expand along the first row. Alternate signs: +, -, +.", vars:[] },
+      { name:"Matrix Properties", math:"(AB)⁻¹ = B⁻¹A⁻¹\n(AB)ᵀ  = BᵀAᵀ\ndet(AB) = det(A)·det(B)", desc:"Order reverses for inverse and transpose of a product.", vars:[] },
+      { name:"Transformation Matrices", math:"Rotation (anti-CW) by θ:\n[[cosθ, -sinθ],[sinθ, cosθ]]\nReflection in y-axis: [[-1,0],[0,1]]\nReflection in x-axis: [[1,0],[0,-1]]\nDilation by a: [[a,0],[0,a]]", desc:"Standard 2D transformation matrices.", vars:[] },
+    ]},
+    { topic:"Vectors (3D)", icon:"➡️", formulas:[
+      { name:"Scalar Product", math:"a·b = |a||b|cosθ = a₁b₁+a₂b₂+a₃b₃", desc:"Use components to calculate; use modulus form to find angle θ.", vars:[] },
+      { name:"Cross Product", math:"a×b = |i  j  k |\n      |a₁ a₂ a₃|\n      |b₁ b₂ b₃|\n|a×b| = |a||b|sinθ", desc:"Result is perpendicular to both a and b. Magnitude = area of parallelogram.", vars:[] },
+      { name:"Scalar Triple Product", math:"a·(b×c) = |a₁ a₂ a₃|\n           |b₁ b₂ b₃|\n           |c₁ c₂ c₃|", desc:"Gives the volume of the parallelepiped formed by the three vectors.", vars:[] },
+      { name:"Equation of a Line (3D)", math:"Parametric: x=x₁+at, y=y₁+bt, z=z₁+ct\nSymmetric: (x-x₁)/a = (y-y₁)/b = (z-z₁)/c", desc:"Both forms needed. Direction vector d = (a,b,c).", vars:["(x₁,y₁,z₁) = point on line","(a,b,c) = direction vector"] },
+      { name:"Equation of a Plane", math:"Vector:    r·n = a·n\nCartesian: lx + my + nz = k", desc:"n = (l,m,n) is the normal vector. k = a·n where a is any point on the plane.", vars:["n = normal vector"] },
+      { name:"Angles", math:"Lines: angle between direction vectors\nPlanes: angle between normal vectors\nLine & plane: 90° - (angle between n and d)", desc:"Always find the acute angle.", vars:[] },
+    ]},
+    { topic:"Odd & Even Functions", icon:"🔁", formulas:[
+      { name:"Odd & Even Functions", math:"Odd:  f(-x) = -f(x)  (180° rotational symmetry)\nEven: f(-x) =  f(x)  (symmetry about y-axis)", desc:"sin x and tan x are odd. cos x is even.", vars:[] },
+    ]},
+    { topic:"Proof", icon:"✏️", formulas:[
+      { name:"Proof by Induction", math:"1) Base case: show true for n=1\n2) Assume true for n=k\n3) Show true for n=k+1\n4) Conclusion statement", desc:"All four steps required for full marks. Don't skip the conclusion!", vars:[] },
+      { name:"Proof by Contradiction", math:"1) Assume the OPPOSITE is true\n2) Derive a contradiction\n3) Conclude original must be true", desc:"Start by assuming false, show this leads to an impossibility.", vars:[] },
+    ]},
+  ]
+};
+
+let currentLevel = 'n5';
+
+function setLevel(level) {
+  currentLevel = level;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.tab.${level}`).classList.add('active');
+  document.getElementById('searchInput').value = '';
+  renderFormulas();
+}
+
+function highlight(text, query) {
+  if (!query) return text;
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi');
+  return text.replace(re, '<span class="highlight">$1</span>');
+}
+
+function renderFormulas() {
+  const container = document.getElementById('formulaContainer');
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  const topics = data[currentLevel];
+  const labels = { n5:'National 5', higher:'Higher', adv:'Advanced Higher' };
+  let html = `<span class="level-badge badge-${currentLevel}">${labels[currentLevel]}</span>`;
+  let anyResults = false;
+
+  topics.forEach((topic, ti) => {
+    const filtered = query
+      ? topic.formulas.filter(f =>
+          f.name.toLowerCase().includes(query) ||
+          f.math.toLowerCase().includes(query) ||
+          f.desc.toLowerCase().includes(query) ||
+          f.vars.some(v => v.toLowerCase().includes(query)))
+      : topic.formulas;
+    if (!filtered.length) return;
+    anyResults = true;
+
+    const cards = filtered.map(f => `
+      <div class="formula-card">
+        <div class="formula-name">${highlight(f.name, query)}</div>
+        <div class="formula-math">${highlight(f.math, query)}</div>
+        <div class="formula-desc">${highlight(f.desc, query)}</div>
+        ${f.vars.length ? `<div class="formula-vars">${f.vars.map(v=>`<span class="var-tag">${highlight(v,query)}</span>`).join('')}</div>` : ''}
+      </div>`).join('');
+
+    html += `
+      <div class="topic-section" id="tp-${currentLevel}-${ti}">
+        <div class="topic-header" onclick="toggleTopic('tp-${currentLevel}-${ti}')">
+          <span class="topic-title"><span class="topic-icon">${topic.icon}</span>${highlight(topic.topic, query)}</span>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="topic-body">${cards}</div>
+      </div>`;
+  });
+
+  if (!anyResults) html += `<div class="empty"><span class="empty-emoji">🤔</span>No formulas found for "${query}"</div>`;
+  container.innerHTML = html;
+
+  if (query) {
+    document.querySelectorAll('.topic-section').forEach(s => s.classList.add('open'));
+  } else {
+    const first = document.querySelector('.topic-section');
+    if (first) first.classList.add('open');
+  }
+}
+
+function toggleTopic(id) { document.getElementById(id).classList.toggle('open'); }
+
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); deferredPrompt = e;
+  document.getElementById('install-banner').classList.add('show');
+});
+function installApp() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      document.getElementById('install-banner').classList.remove('show');
+      deferredPrompt = null;
+    });
+  }
+}
+
+renderFormulas();
+</script>
+</body>
+</html>
